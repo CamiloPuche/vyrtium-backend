@@ -19,6 +19,7 @@ Mantenemos una **Arquitectura Modular** agrupada por dominio:
 2. **Servicios agnósticos del framework**: Los servicios NO reciben objetos `req` ni `res`. Reciben datos planos y retornan DTOs o lanzan `AppError`.
 3. **Sin fugas del ORM**: La lógica de negocio interactúa con repositorios, no con SQL directo en los controladores.
 4. **Soft Delete Universal**: Los borrados duros (`DELETE FROM`) están estrictamente prohibidos. Se usa `@DeleteDateColumn()` de TypeORM y `.softDelete()`.
+5. **Defensa en Profundidad**: Además de las validaciones de Zod en HTTP, las restricciones críticas (precios > 0, stock >= 0) se blindan a nivel de motor con decoradores `@Check` de TypeORM.
 
 ---
 
