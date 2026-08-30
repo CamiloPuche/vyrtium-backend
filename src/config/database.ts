@@ -9,17 +9,33 @@ import { Product } from '../entities/Product';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
-export const AppDataSource = new DataSource({
-  type: 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '5432', 10),
-  username: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'vyrtium_db',
-  synchronize: process.env.DB_SYNCHRONIZE === 'true' || isDevelopment,
-  logging: isDevelopment ? ['error', 'warn'] : ['error'],
-  entities: [User, Category, Product],
-  migrations: ['./src/migrations/*.ts'],
-  subscribers: [],
-  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
-});
+export const AppDataSource = new DataSource(
+  process.env.DATABASE_URL
+    ? {
+        type: 'postgres',
+        url: process.env.DATABASE_URL,
+        synchronize: process.env.DB_SYNCHRONIZE === 'true' || isDevelopment,
+        logging: isDevelopment ? ['error', 'warn'] : ['error'],
+        entities: [User, Category, Product],
+        migrations: ['./src/migrations/*.ts'],
+        subscribers: [],
+        ssl: { rejectUnauthorized: false },
+      }
+    : {
+        type: 'postgres',
+        host: process.env.DB_HOST || 'localhost',
+        port: parseInt(process.env.DB_PORT || '5432', 10),
+        username: process.env.DB_USER || 'postgres',
+        password: process.env.DB_PASSWORD || '',
+        database: process.env.DB_NAME || 'vyrtium_db',
+        synchronize: process.env.DB_SYNCHRONIZE === 'true' || isDevelopment,
+        logging: isDevelopment ? ['error', 'warn'] : ['error'],
+        entities: [User, Category, Product],
+        migrations: ['./src/migrations/*.ts'],
+        subscribers: [],
+        ssl:
+          process.env.DB_SSL === 'true' || !isDevelopment
+            ? { rejectUnauthorized: false }
+            : false,
+      }
+);
