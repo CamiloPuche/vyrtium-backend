@@ -14,6 +14,14 @@ const options: swaggerJsdoc.Options = {
     },
     servers: [
       {
+        url: '/',
+        description: 'Current Server (Auto-detected)',
+      },
+      {
+        url: 'https://vyrtium-backend.onrender.com',
+        description: 'Production Server (Render)',
+      },
+      {
         url: `http://localhost:${process.env.PORT || 4000}`,
         description: 'Local Development Server',
       },
