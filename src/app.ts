@@ -5,6 +5,7 @@ import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './config/swagger';
 import { errorHandler } from './errors/errorHandler';
 import { httpLogger } from './utils/logger';
+import authRoutes from './modules/auth/auth.routes';
 
 const app: Application = express();
 
@@ -15,7 +16,7 @@ app.use(httpLogger);
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:4000',
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
     credentials: true,
   })
 );
@@ -56,6 +57,9 @@ app.get('/health', (_req: Request, res: Response) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+// API Routes
+app.use('/api/auth', authRoutes);
 
 // Global Error Handler
 app.use(errorHandler);
