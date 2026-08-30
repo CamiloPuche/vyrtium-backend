@@ -21,9 +21,13 @@ const router = Router();
  *           schema:
  *             type: object
  *             required:
+ *               - name
  *               - email
  *               - password
  *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Juan Pérez
  *               email:
  *                 type: string
  *                 format: email
@@ -53,8 +57,12 @@ const router = Router();
  *                     id:
  *                       type: string
  *                       format: uuid
+ *                     name:
+ *                       type: string
+ *                       example: Juan Pérez
  *                     email:
  *                       type: string
+ *                       example: usuario@vyrtium.com
  *       400:
  *         description: Error de validación en los campos enviados.
  *       409:

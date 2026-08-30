@@ -11,6 +11,12 @@ import {
   RefreshTokenResponse,
   JwtPayload,
 } from './auth.interface';
+import { notificationService } from '../../utils/notifications/notification.service';
+import {
+  NOTIFICATION_TEMPLATES_NAMES,
+  USER_NOTIFICATIONS_NAMES,
+} from '../../utils/notifications/notification.constants';
+import { logger } from '../../utils/logger';
 
 export class AuthService {
   private readonly saltRounds = 12;
@@ -103,6 +109,7 @@ export class AuthService {
     const passwordHash = await bcrypt.hash(input.password, this.saltRounds);
 
     const user = this.userRepository.create({
+      name: input.name.trim(),
       email: normalizedEmail,
       passwordHash,
       refreshTokenHash: null,
@@ -111,8 +118,26 @@ export class AuthService {
 
     const savedUser = await this.userRepository.save(user);
 
+    // Asynchronous non-blocking Welcome Notification
+    notificationService
+      .send({
+        templateName: NOTIFICATION_TEMPLATES_NAMES.USER_NOTIFICATIONS,
+        subcase: USER_NOTIFICATIONS_NAMES.REGISTRO_DE_USUARIO,
+        email: savedUser.email,
+        variables: {
+          email: savedUser.email,
+          name: savedUser.name,
+          loginUrl: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/login`,
+        },
+        providers: ['EMAIL'],
+      })
+      .catch((err) => {
+        logger.error({ err }, 'Error al despachar notificación de bienvenida');
+      });
+
     return {
       id: savedUser.id,
+      name: savedUser.name,
       email: savedUser.email,
     };
   }
@@ -141,6 +166,7 @@ export class AuthService {
       refreshToken: tokens.refreshToken,
       user: {
         id: user.id,
+        name: user.name,
         email: user.email,
       },
     };
