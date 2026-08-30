@@ -94,3 +94,9 @@ El módulo debe garantizar el almacenamiento seguro de credenciales, la emisión
 - `POST /api/auth/logout` anula el `refresh_token_hash` impidiendo renovaciones posteriores.
 - `GET /api/auth/perfil` rechaza peticiones sin token (401) y responde con éxito (200) cuando se envía `Authorization: Bearer <accessToken>`.
 - Swagger en `/api/docs` incluye los 5 endpoints documentados con schemas y tags.
+
+---
+
+## 6. Evolución del Módulo
+
+- **Personalización con campo `name`:** Durante la fase del sistema de notificaciones (`feat/email-notifications`), se incorporó el campo `name` obligatorio (`varchar(150)`) en la entidad `User`, en el validador `registerSchema`, en `req.user` y en los contratos de respuesta para permitir la personalización de las plantillas transaccionales de bienvenida. Para consultar los detalles y decisiones arquitectónicas de esta extensión, ver [docs/06-notifications-spec.md].

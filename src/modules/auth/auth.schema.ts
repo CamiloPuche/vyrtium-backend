@@ -1,6 +1,11 @@
 import { z } from 'zod';
 
 export const registerSchema = z.object({
+  name: z
+    .string()
+    .min(1, 'El nombre es obligatorio')
+    .max(150, 'El nombre no puede exceder 150 caracteres')
+    .trim(),
   email: z
     .string()
     .min(1, 'El correo electrónico es obligatorio')
