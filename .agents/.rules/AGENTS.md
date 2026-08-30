@@ -13,12 +13,14 @@ Mantenemos una **Arquitectura Modular** agrupada por dominio:
   - `*.repository.ts`: Wrapper sobre TypeORM. Abstrae los detalles de persistencia y consultas.
   - `*.routes.ts`: Router de Express que asocia ruta, middlewares y método del controller.
   - `*.schema.ts`: Esquemas de Zod para validación de entrada (DTOs).
+  - `*.interface.ts`: Interfaces y contratos de tipos del módulo.
 
 ### Reglas Inviolables de Capas
 1. **Controladores delgados (Thin Controllers)**: Cero consultas SQL, cero bifurcaciones complejas, cero lógica de negocio.
 2. **Servicios agnósticos del framework**: Los servicios NO reciben objetos `req` ni `res`. Reciben datos planos y retornan DTOs o lanzan `AppError`.
 3. **Sin fugas del ORM**: La lógica de negocio interactúa con repositorios, no con SQL directo en los controladores.
 4. **Soft Delete Universal**: Los borrados duros (`DELETE FROM`) están estrictamente prohibidos. Se usa `@DeleteDateColumn()` de TypeORM y `.softDelete()`.
+5. **Defensa en Profundidad**: Además de las validaciones de Zod en HTTP, las restricciones críticas (precios > 0, stock >= 0) se blindan a nivel de motor con decoradores `@Check` de TypeORM.
 
 ---
 
@@ -44,6 +46,7 @@ res.status(500).json({ error: 'Fallo BD: ' + err.message });
 ## 3. Estándares de Validación y Tipado
 
 - **Validación en la frontera**: Todo endpoint POST, PUT y PATCH debe validar `req.body` mediante esquemas de Zod en el middleware `validate`.
+- **Segregación de Interfaces**: Prohibido declarar `interface` o `type` inline dentro de servicios, controladores o middlewares. Todas las interfaces deben residir en su respectivo archivo `*.interface.ts`.
 - **TypeScript Estricto**: `noImplicitAny: true`, `noUncheckedIndexedAccess: true`. Prohibido el uso de `any`. Usar tipos concretos, genéricos o `unknown`.
 - **Limpieza de código**: Eliminar imports sin usar y código muerto antes de entregar.
 
