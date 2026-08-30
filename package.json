@@ -8,6 +8,7 @@
     "build": "rimraf dist && tsc",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
+    "seed": "tsx src/seeds/seed.ts",
     "typeorm": "tsx ./node_modules/typeorm/cli.js",
     "migration:generate": "tsx ./node_modules/typeorm/cli.js migration:generate -d src/config/database.ts",
     "migration:run": "tsx ./node_modules/typeorm/cli.js migration:run -d src/config/database.ts",
