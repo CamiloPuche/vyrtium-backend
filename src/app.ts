@@ -6,6 +6,7 @@ import { swaggerSpec } from './config/swagger';
 import { errorHandler } from './errors/errorHandler';
 import { httpLogger } from './utils/logger';
 import authRoutes from './modules/auth/auth.routes';
+import categoryRoutes from './modules/categories/category.routes';
 
 const app: Application = express();
 
@@ -60,6 +61,7 @@ app.get('/health', (_req: Request, res: Response) => {
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/categories', categoryRoutes);
 
 // Global Error Handler
 app.use(errorHandler);
