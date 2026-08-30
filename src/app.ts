@@ -7,6 +7,8 @@ import { errorHandler } from './errors/errorHandler';
 import { httpLogger } from './utils/logger';
 import authRoutes from './modules/auth/auth.routes';
 import categoryRoutes from './modules/categories/category.routes';
+import productRoutes from './modules/products/product.routes';
+import publicProductRoutes from './modules/products/public.routes';
 
 const app: Application = express();
 
@@ -62,6 +64,8 @@ app.get('/health', (_req: Request, res: Response) => {
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/publico', publicProductRoutes);
 
 // Global Error Handler
 app.use(errorHandler);
