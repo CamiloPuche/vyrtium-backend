@@ -32,6 +32,7 @@ La arquitectura sigue los principios de **Clean Architecture** y **Modular Monol
 - [05 · CRUD de Productos y Catálogo Público](docs/05-product-crud-spec.md)
 - [06 · Sistema de Notificaciones con Patrón Strategy y Resend](docs/06-notifications-spec.md)
 - [07 · Sembrado de Datos de Prueba (Seeders en COP)](docs/07-seeders-spec.md)
+- [08 · Trade-offs de Robustez, Límites Numéricos y Resiliencia de Errores](docs/08-error-hardening-tradeoffs-spec.md)
 
 ---
 

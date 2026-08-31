@@ -13,11 +13,13 @@ export const createProductSchema = z.object({
     .nullable(),
   price: z.coerce
     .number({ message: 'El precio debe ser un valor numérico' })
-    .positive('El precio debe ser mayor a 0'),
+    .positive('El precio debe ser mayor a 0')
+    .max(99999999.99, 'El precio no puede exceder $99.999.999 COP'),
   stock: z.coerce
     .number({ message: 'El stock debe ser un valor numérico entero' })
     .int('El stock debe ser un número entero')
-    .min(0, 'El stock no puede ser negativo'),
+    .min(0, 'El stock no puede ser negativo')
+    .max(1000000, 'El stock no puede exceder 1.000.000 unidades'),
   categoryId: z.string().uuid('El categoryId debe ser un UUID válido'),
   imageUrl: z.string().url('La URL de la imagen debe ser válida').optional().nullable(),
 });
