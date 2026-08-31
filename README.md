@@ -4,6 +4,14 @@ API REST empresarial construida para la gestión integral de catálogo de produc
 
 ---
 
+## 🌐 Enlaces en Producción (Live Demo)
+
+- **🔌 API REST Base (Render):** [https://vyrtium-backend.onrender.com](https://vyrtium-backend.onrender.com)
+- **📖 Documentación Swagger UI (Render):** [https://vyrtium-backend.onrender.com/api/docs/](https://vyrtium-backend.onrender.com/api/docs/)
+- **🚀 Frontend Comercial Desplegado (Vercel):** [https://vyrtium-frontend.vercel.app/](https://vyrtium-frontend.vercel.app/)
+
+---
+
 ## 🛠️ Stack Tecnológico
 
 | Capa / Tecnología | Herramienta | Propósito |
@@ -33,6 +41,26 @@ La arquitectura sigue los principios de **Clean Architecture** y **Modular Monol
 - [06 · Sistema de Notificaciones con Patrón Strategy y Resend](docs/06-notifications-spec.md)
 - [07 · Sembrado de Datos de Prueba (Seeders en COP)](docs/07-seeders-spec.md)
 - [08 · Trade-offs de Robustez, Límites Numéricos y Resiliencia de Errores](docs/08-error-hardening-tradeoffs-spec.md)
+
+---
+
+## 🏛️ Justificación Técnica · Elección de PostgreSQL sobre MySQL
+
+Aunque el requerimiento base sugería MySQL, se optó técnicamente por **PostgreSQL** por motivos de robustez, seguridad y arquitectura empresarial:
+
+1. **Seguridad y Prevención de Enumeración (UUID v4 Nativo):**
+   - PostgreSQL ofrece soporte nativo y de alto rendimiento para identificadores únicos universales (`uuid-ossp` / `gen_random_uuid()`).
+   - El uso de UUIDs como Primary Keys previene vulnerabilidades **OWASP IDOR** (*Insecure Direct Object References*) y ataques de raspado (*scraping*) basados en la enumeración predecible de IDs secuenciales enteros (`/api/products/1`, `/api/products/2`).
+
+2. **Integridad Relacional en Profundidad (*Defense in Depth*):**
+   - Restricciones de integridad directas a nivel de motor SQL (`@Check('stock >= 0')` y `@Check('price > 0')`), garantizando que la consistencia del inventario esté blindada en la base de datos más allá de la capa de validación HTTP.
+   - Manejo de precisión monetaria exacta con tipos `numeric(10, 2)` para precios en COP, evitando pérdidas por redondeo de punto flotante.
+
+3. **Ecosistema Cloud-Native en Render:**
+   - La infraestructura de Render provee instancias gestionadas de PostgreSQL con soporte SSL nativo, alta disponibilidad y compatibilidad directa con pipelines de despliegue continuo.
+
+4. **Desacoplamiento Garantizado por el ORM (TypeORM):**
+   - Siguiendo los principios de **Clean Architecture**, la capa de persistencia está completamente abstraída mediante TypeORM. Si la empresa requiriese migrar a MySQL o MariaDB, **no se requiere modificar ni una sola línea de lógica de negocio ni entidades**; únicamente se cambiaría el dialecto (`type: 'mysql'`) y la cadena de conexión en `src/config/database.ts`.
 
 ---
 
